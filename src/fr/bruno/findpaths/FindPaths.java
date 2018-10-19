@@ -18,18 +18,18 @@ public class FindPaths {
 			for (int j = 0; j < n; j++) {
 				int[] position = new int[] {i, j};
 				if ( i == 0 && j == 0 ) rootPosition = position;
-				ArrayList<int[]> adjascentPositions = new ArrayList<int[]>();
-				if(i + 1 < m) adjascentPositions.add(new int[]{i+1, j});
-				if(j + 1 < n) adjascentPositions.add(new int[]{i, j+1});
-				positionList.put(position, adjascentPositions);
+				ArrayList<int[]> adjacentPositions = new ArrayList<int[]>();
+				if(i + 1 < m) adjacentPositions.add(new int[]{i+1, j});
+				if(j + 1 < n) adjacentPositions.add(new int[]{i, j+1});
+				positionList.put(position, adjacentPositions);
 			}
 		}
 		calculatePaths(rootPosition, new ArrayList<int[]>());
 		
 		System.out.println("posible paths : " + paths.size());
 		for (ArrayList<int[]> path1 : paths) {
-			for (int[] node : path1) {
-				System.out.print("[" + node[0] + "-" + node[1] + "] ");
+			for (int[] posit : path1) {
+				System.out.print("[" + posit[0] + "-" + posit[1] + "] ");
 			}
 			System.out.println();
 		}
@@ -38,25 +38,24 @@ public class FindPaths {
 	
 	private static void calculatePaths(int[] key, ArrayList<int[]> path) {
 		
-		// Recherche de la clé originale
+		// Replace searched key by original key to get according signatures
 		for ( int[] k : positionList.keySet() ) {
-		    if(k[0] == key[0] && k[1] == key[1])
-		    	key = k;
+		    if(k[0] == key[0] && k[1] == key[1]) key = k;
 		}
 		
-		ArrayList<int[]> childrenNodes = positionList.get(key);
+		ArrayList<int[]> adjacentPositions = positionList.get(key);
 		
-		if(childrenNodes == null ||  childrenNodes.isEmpty()) {
+		if(adjacentPositions == null ||  adjacentPositions.isEmpty()) {
 			paths.add(path);
 			
 		} else {
-			for (int[] childNode : childrenNodes) {
+			for (int[] position : adjacentPositions) {
 				ArrayList<int[]> newPath = new ArrayList<int[]>();
-				for(int[] nod: path) {
-					newPath.add(nod);
+				for(int[] pos: path) {
+					newPath.add(pos);
 				}
 				newPath.add(key);
-				calculatePaths(childNode, newPath);
+				calculatePaths(position, newPath);
 			}
 		}
 	}
